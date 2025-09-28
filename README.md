@@ -2,10 +2,6 @@
 
 A simple MongoDB connection wrapper for Node.js applications.
 
-## Installation
-
-No additional installation needed beyond MongoDB driver.
-
 ## Basic Usage
 
 ```javascript
