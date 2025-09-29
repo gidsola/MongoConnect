@@ -1,0 +1,17 @@
+{
+  "name": "mongoconnect-ts",
+  "version": "1.0.1",
+  "description": "MongoDb handlers.",
+  "author": "Goodsie",
+  "main": "./@types/index.js",
+  "type": "module",
+  "typeRoots": [
+    "./node_modules/@types",
+    "./@types"
+  ],
+  "dependencies": {
+    "@types/node": "^24.5.2",
+    "mongodb": "^6.20.0",
+    "typescript": "^5.9.2"
+  }
+}
