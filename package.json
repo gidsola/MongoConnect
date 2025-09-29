@@ -1,6 +1,6 @@
 {
   "name": "mongoconnect-ts",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "MongoDb handlers.",
   "author": "Goodsie",
   "main": "./@types/index.js",

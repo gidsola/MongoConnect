@@ -38,7 +38,6 @@ class MongoConnect {
 
 class Mongo extends MongoConnect {
 
-  public Data;
   /**
    * The url or "Connection String" should follow formats as specified at:
    * @see https://www.mongodb.com/docs/manual/reference/connection-string-examples/#connection-string-examples
@@ -51,7 +50,6 @@ class Mongo extends MongoConnect {
       ? super(url)
       : super(url, db);
 
-    this.Data = async () => await this.getAll();
   }
 
   /**
@@ -84,13 +82,13 @@ class Mongo extends MongoConnect {
 
     for await (const collection of datas) {
       const
-        c = (await collection.find().toArray()),
+        documents = (await collection.find().toArray()),
         pn = collection.collectionName;
-      
-        for (const k of c) {
-        const doc = Object.entries(k);
-        if (doc[1])
-          data[pn] = { ...data[pn], [doc[1][0]]: doc[1][1] };
+
+      for (const entry of documents) {
+        const page = Object.entries(entry);
+        if (page[1])
+          data[pn] = { ...data[pn], [page[1][0]]: page[1][1] };
       };
     };
 

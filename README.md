@@ -10,12 +10,12 @@ I'll expand the readme more later.
 import Mongo from 'mongoconnect-ts';
 
 // Connect to database
-const mongo = new Mongo("mongodb://localhost:27017", "portfolio");
+const mongo = new Mongo("mongodb://localhost:27017", "database_name");
 
 // Access collections
 const collections = await mongo.db.collections();
 
 // Retrieve all collection documents from the database.
-const documents = await mongo.Data();
+const documents = await mongo.getAll();
 
 ```
