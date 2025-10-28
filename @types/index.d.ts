@@ -4,6 +4,7 @@ declare class MongoConnect {
     client: MongoClient;
     db: import("mongodb").Db;
     /**
+     * @todo: accept options block
      * The url or "Connection String" should follow formats as specified at:
      * @see https://www.mongodb.com/docs/manual/reference/connection-string-examples/#connection-string-examples
      *
@@ -14,11 +15,6 @@ declare class MongoConnect {
     private isMongoString;
 }
 declare class Mongo extends MongoConnect {
-    Data: () => Promise<{
-        [x: string]: {
-            [key: string]: any;
-        };
-    }>;
     /**
      * The url or "Connection String" should follow formats as specified at:
      * @see https://www.mongodb.com/docs/manual/reference/connection-string-examples/#connection-string-examples
@@ -46,16 +42,6 @@ declare class Mongo extends MongoConnect {
             [key: string]: any;
         };
     }>;
-    /**
-     * create a validation schema from an Object
-     * @deprecated marking for non-use until complete.
-     */
-    createSchemaFromObject(): Promise<void>;
-    /**
-     * @returns a client object
-     * @deprecated i'm not likely to use this anymore.
-     */
-    getClient(): Promise<MongoClient>;
 }
 export default Mongo;
 //# sourceMappingURL=index.d.ts.map

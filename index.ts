@@ -1,14 +1,14 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 type AllCollections = { [x: string]: { [key: string]: any; } };
 
 class MongoConnect {
-
   private url;
   client;
   db;
 
   /**
+   * @todo: accept options block
    * The url or "Connection String" should follow formats as specified at:
    * @see https://www.mongodb.com/docs/manual/reference/connection-string-examples/#connection-string-examples
    * 
@@ -17,24 +17,27 @@ class MongoConnect {
    */
   constructor(url: string, db: string | null = null) {
     if (!url) throw new Error("Missing connection string.");
-
     this.url = this.isMongoString(url);
-    this.client = new MongoClient(this.url);
+    this.client = new MongoClient(this.url, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true
+      }
+    });
+
     this.db = db !== null
       ? this.client.db(db)
       : this.client.db();
-
-  }
-
+  };
 
   private isMongoString(s: string) {
     if (s.startsWith("mongodb+srv://") || s.startsWith("mongodb://"))
       return s;
-    throw new Error("Unrecognized connection string..");
+    throw new Error("Unrecognized connection string.");
   };
 
 };
-
 
 class Mongo extends MongoConnect {
 
@@ -46,11 +49,8 @@ class Mongo extends MongoConnect {
    * @param db database name to use if not specifying in connection string
    */
   constructor(url: string, db: string | null = null) {
-    db === null
-      ? super(url)
-      : super(url, db);
-
-  }
+    super(url, db);
+  };
 
   /**
    * Creates a collection with schema validation.
@@ -65,11 +65,9 @@ class Mongo extends MongoConnect {
     try {
       return await this.db.createCollection(collection, schema);
     } catch (e) {
-      console.log(e);
-      throw new Error("Failed to create collection!")
+      throw new Error("Failed to create collection!");
     }
   };
-
 
   /**
    * 
@@ -77,12 +75,12 @@ class Mongo extends MongoConnect {
    */
   async getAll() {
     const
-      datas = await this.db.collections(),
+      collections = await this.db.collections(),
       data: AllCollections = {};
 
-    for await (const collection of datas) {
+    for await (const collection of collections) {
       const
-        documents = (await collection.find().toArray()),
+        documents = await collection.find().toArray(),
         pn = collection.collectionName;
 
       for (const entry of documents) {
@@ -91,28 +89,7 @@ class Mongo extends MongoConnect {
           data[pn] = { ...data[pn], [page[1][0]]: page[1][1] };
       };
     };
-
     return { ...data };
   };
-
-
-
-
-  /**
-   * create a validation schema from an Object
-   * @deprecated marking for non-use until complete.
-   */
-  async createSchemaFromObject() {
-    //TODO
-  };
-
-  /**
-   * @returns a client object
-   * @deprecated i'm not likely to use this anymore.
-   */
-  async getClient() {
-    return this.client;
-  };
-
 };
 export default Mongo;
